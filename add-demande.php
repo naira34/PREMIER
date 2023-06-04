@@ -14,8 +14,15 @@ $username = $_SESSION['username'];
 $query = "SELECT id_personne FROM personne WHERE username='$username' AND role='employe'";
 $result = mysqli_query($link, $query);
 $row = mysqli_fetch_assoc($result);
-$id_personne = $row['id_personne'];
 
+if ($row) {
+    // La requête a retourné une ligne, récupérer l'ID de la personne
+    $id_personne = $row['id_personne'];
+} else {
+
+    echo "Erreur: Impossible de récupérer l'ID de la personne connectée.";
+    exit();
+}
 
 
 ?>
