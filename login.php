@@ -1,61 +1,80 @@
 
-<?php
-require_once "config.php";
+<?php require_once "config.php";
 session_start();
+  
 
-$output = "";
+   
+   $output = "";
 
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+  if (isset($_POST['login'])) {
+  	   
+  	   $username = $_POST['username'];
+  	   
+  	   $password = $_POST['password'];
 
-    if (empty($username)) {
-        // Gérer le cas où le nom d'utilisateur est vide
-    } elseif (empty($password)) {
-        // Gérer le cas où le mot de passe est vide
-    } else {
-        $query = "SELECT * FROM personne WHERE username='$username' AND password='$password'";
-        $res = mysqli_query($link, $query);
+  	   if (empty($username)) {
+  	   	
+  	   }else if(empty($password)){
 
-        if (mysqli_num_rows($res) == 1) {
-            $row = mysqli_fetch_assoc($res);
-            $role = $row['role'];
+  	   }else{
 
-            if ($role == "employe") {
-                $_SESSION['role'] = 'employe';
-                $_SESSION['employe'] = $username;
-                header("Location: employe.php");
-                exit();
-            } elseif ($role == "chef") {
-                $_SESSION['role'] = 'chef';
-                $_SESSION['chef'] = $username;
-                header("Location: chef_de_departement.php");
-                exit();
-            } elseif ($role == "responsable_bd") {
-                $_SESSION['role'] = 'responsable_bd';
-                $_SESSION['responsable_bd'] = $username;
-                header("Location: responsable_bd.php");
-                exit();
-            } elseif ($role == "admin") {
-                $_SESSION['role'] = 'admin';
-                $_SESSION['admin'] = $username;
-                header("Location: admin.php");
-                exit();
-            } elseif ($role == "agent") {
-                $_SESSION['role'] = 'agent';
-                $_SESSION['agent'] = $username;
-                header("Location: agent_de_saisie.php");
-                exit();
-            } else {
-                // Gérer le cas où le rôle n'est pas reconnu
-            }
-        } else {
-            // Gérer le cas où la connexion a échoué
+         $query = "SELECT * FROM personne WHERE username='$username' AND password='$password'";
+         $res = mysqli_query($link,$query);
+
+         if (mysqli_num_rows($res) == 1) {
+          $row = mysqli_fetch_assoc($res);
+          $role = $row['role'];
+
+          if ($role == "employee") {
+            $_SESSION['role'] = 'employe';
+          
+
+
+             $_SESSION['employe'] = $username;
+             header("Location: employe.php");
+             
+           }else if($role == "chef"){
+            $_SESSION['role'] = 'chef';
+              
+              $_SESSION['chef'] = $username;
+              header("Location: chef_de_departement.php");
+
+
+           }else if($role == "responsable_bd"){
+            $_SESSION['role'] = 'responsable_bd';
+            $_SESSION['responsable_bd'] = $username;
+            header("Location: responsable_bd.php");
+
+         } else if($role == "admin"){
+          $_SESSION['role'] = 'admin';
+              
+          $_SESSION['admin'] = $username;
+          header("Location: admin.php");
+
+       }
+       else if($role == "agent"){
+        $_SESSION['role'] = 'agent';
+              
+        $_SESSION['agent'] = $username;
+        header("Location: agent_de_saisie.php");
+      }
+         else if($role == "agent"){
+                
+          $_SESSION['agent'] = $username;
+          header("Location: agent_de_saisie.php");
         }
-    }
-}
-?>
+         	 $output .= "you have logged-In";
+         }else{
+             $output .= "Failed to login";
+         }
 
+  	   }
+  }
+
+
+
+
+ ?>
 <!doctype html>
 <html class="no-js" lang="en">
 
