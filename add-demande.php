@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_bind_param($stmt, "sssssssssss", $param_id_personne, $param_demandeur, $param_direction, $param_departement, $param_atelier, $param_titre, $param_documment_ecrit, $param_documment_cartographie, $param_raster, $param_echelle, $param_date);
 
             // Set parameters
-            $param_id_personne = $id_personne;+
+            $param_id_personne = $id_personne;
             $param_demandeur = $demandeur;
             $param_direction = $direction;
             $param_departement = $departement;
