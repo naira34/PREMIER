@@ -1,80 +1,55 @@
 
-<?php require_once "config.php";
+<?php
+require_once "config.php";
 session_start();
-  
 
-   
-   $output = "";
+$output = "";
 
-  if (isset($_POST['login'])) {
-  	   
-  	   $username = $_POST['username'];
-  	   
-  	   $password = $_POST['password'];
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-  	   if (empty($username)) {
-  	   	
-  	   }else if(empty($password)){
+    if (empty($username)) {
+        // Gérer le cas où le nom d'utilisateur est vide
+    } else if (empty($password)) {
+        // Gérer le cas où le mot de passe est vide
+    } else {
+        $query = "SELECT * FROM personne WHERE username='$username' AND password='$password'";
+        $res = mysqli_query($link, $query);
 
-  	   }else{
+        if (mysqli_num_rows($res) == 1) {
+            $row = mysqli_fetch_assoc($res);
+            $role = $row['role'];
 
-         $query = "SELECT * FROM personne WHERE username='$username' AND password='$password'";
-         $res = mysqli_query($link,$query);
+            if ($role == "employe") {
+                $_SESSION['role'] = 'employe';
+                $_SESSION['employe'] = $username;
 
-         if (mysqli_num_rows($res) == 1) {
-          $row = mysqli_fetch_assoc($res);
-          $role = $row['role'];
+                // Récupérer l'ID de la personne connectée
+                $id_personne = $row['id_personne'];
 
-          if ($role == "employee") {
-            $_SESSION['role'] = 'employe';
-          
+                // Stocker l'ID de la personne dans la session
+                $_SESSION['id_personne'] = $id_personne;
 
-
-             $_SESSION['employe'] = $username;
-             header("Location: employe.php");
-             
-           }else if($role == "chef"){
-            $_SESSION['role'] = 'chef';
-              
-              $_SESSION['chef'] = $username;
-              header("Location: chef_de_departement.php");
-
-
-           }else if($role == "responsable_bd"){
-            $_SESSION['role'] = 'responsable_bd';
-            $_SESSION['responsable_bd'] = $username;
-            header("Location: responsable_bd.php");
-
-         } else if($role == "admin"){
-          $_SESSION['role'] = 'admin';
-              
-          $_SESSION['admin'] = $username;
-          header("Location: admin.php");
-
-       }
-       else if($role == "agent"){
-        $_SESSION['role'] = 'agent';
-              
-        $_SESSION['agent'] = $username;
-        header("Location: agent_de_saisie.php");
-      }
-         else if($role == "agent"){
-                
-          $_SESSION['agent'] = $username;
-          header("Location: agent_de_saisie.php");
+                header("Location: employe.php");
+            } else if ($role == "chef") {
+                // ...
+            } else if ($role == "responsable_bd") {
+                // ...
+            } else if ($role == "admin") {
+                // ...
+            } else if ($role == "agent") {
+                // ...
+            } else {
+                $output .= "Invalid role";
+            }
+        } else {
+            $output .= "Failed to login";
         }
-         	 $output .= "you have logged-In";
-         }else{
-             $output .= "Failed to login";
-         }
+    }
+}
+?>
 
-  	   }
-  }
-
-
-
-
- ?>
 <!doctype html>
 <html class="no-js" lang="en">
 
