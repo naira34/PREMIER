@@ -1,5 +1,4 @@
 <?php
-
 require_once "config.php";
 session_start();
 
@@ -10,21 +9,23 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'employe') {
 }
 
 // Récupérer l'ID de la personne connectée
-$username = $_SESSION['username'];
-$query = "SELECT id_personne FROM personne WHERE username='$username' AND role='employe'";
-$result = mysqli_query($link, $query);
-$row = mysqli_fetch_assoc($result);
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    $query = "SELECT id_personne FROM personne WHERE username='$username' AND role='employe'";
+    $result = mysqli_query($link, $query);
+    $row = mysqli_fetch_assoc($result);
 
-if ($row) {
-    // La requête a retourné une ligne, récupérer l'ID de la personne
-    $id_personne = $row['id_personne'];
+    if ($row) {
+        // La requête a retourné une ligne, récupérer l'ID de la personne
+        $id_personne = $row['id_personne'];
+    } else {
+        echo "Erreur: Impossible de récupérer l'ID de la personne connectée.";
+        exit();
+    }
 } else {
-
-    echo "Erreur: Impossible de récupérer l'ID de la personne connectée.";
+    echo "Erreur: La clé 'username' n'est pas définie dans la session.";
     exit();
 }
-
-
 ?>
 <?php
 // Include config file
