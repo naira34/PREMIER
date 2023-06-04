@@ -1,0 +1,43 @@
+<?php
+
+require_once "config.php";
+
+
+if (isset($_POST["submit"])) {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $res=mysqli_query($conn, "SELECT * FROM user_compte where username='$username' AND password='$password'");
+    $row = mysqli_fetch_assoc($res);
+        if(($row['type_compte'] == 'employee') && ($row['username'] == $username)) {
+            $_SESSION['user']=$row['username'];
+                header("location: employe.php");
+        }
+        else if(($row['type_compte'] == 'rbd') && ($row['username'] == $username)) {
+                header("location: responsable_bd.html");
+        }
+        else if(($row['type_compte'] == 'chef') && ($row['username'] == $username)) {
+            $_SESSION['user']=$row['username'];
+                header("location: chef_de_departement.php");
+
+        }
+        else if(($row['type_compte'] == 'agent') && ($row['username'] == $username)) {
+                header("location: agent_de_saisie.html");
+
+        }
+        else if(($row['type_compte'] == 'admin') && ($row['username'] == $username)) {
+                header("location: index.html");
+
+        }
+        else if(($username == '') && ($password == '')) {
+            echo "<script language='javascript'>";
+            echo "alert('Invalid Inputs')";
+            echo "</script>";
+        }
+        else {
+            echo "<script language='javascript'>";
+            echo "alert('WRONG INFORMATION')";
+            echo "</script>";
+            die();
+        }
+    }
+?>
